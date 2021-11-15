@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; 
+  background-color: #eee!important;
+}
+
+.fixed{position:fixed; top:0}
+
+
+html{
+  overflow: scroll;
+}
+
+.containerPrincipal{
+    margin-left: 5em;
+    margin-right: 3em;
+    padding-top: 8em;
+    padding-bottom: 11em;
+    height: 100%;
+  }
+
+  @media (max-width: 450px) {
+    .containerPrincipal{
+      padding-top: 9em;
+      margin-left: 4.2em;
+      margin-right: 0.5em;
+    }
+  }

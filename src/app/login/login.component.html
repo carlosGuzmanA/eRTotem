@@ -1,0 +1,26 @@
+<div >
+    <div class="container" >
+        <div class="login">
+            <div class="row">
+                <h2>Ingreso al sistema</h2>
+                <div class="col-md-12">
+                        <br>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" [(ngModel)]="login.username"  placeholder="a">
+                            <label for="floatingInput">Usuario</label>
+                          </div>
+                          <br>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" [(ngModel)]="login.password"  placeholder="a">
+                            <label for="floatingInput">Contraseña</label>
+                          </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="submit"   value="Ingresar" (click)="iniciarSesion()" class="btn btn-outline-primary btn-form">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

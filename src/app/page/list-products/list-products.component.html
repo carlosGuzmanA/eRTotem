@@ -1,0 +1,173 @@
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center" *ngIf="!showPdf">
+  <h1 class="display-4 fw-normal">Total ${{ total }}</h1>
+  <button
+    (click)="pagar()"
+    class="btn btn-primary"
+    data-toggle="modal"
+    data-target="#exampleModal"
+  >
+    Pagar
+  </button>
+
+  <div class="alert alert-danger" role="alert" *ngIf="stocknoDisp">
+    El valor ingresado no puede ser mayor al stock disponible!
+  </div>
+  <div class="alert alert-danger" role="alert" *ngIf="totalnoDisp">
+    Debe agregar al menos un producto!
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">SKU</th>
+          <th scope="col">Producto</th>
+          <th scope="col">Precio Unitario</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let product of ListProduct
+              | paginate: { itemsPerPage: 10, currentPage: p }
+          "
+        >
+          <td>{{ product.sku }}</td>
+          <td>{{ product.name }}</td>
+          <td>${{ product.price }}</td>
+          <td>
+            <button
+              [disabled]="product.stock == 0 || product.qty == 0"
+              (click)="restarProduct(product)"
+            >
+              -
+            </button>
+            <input
+              type="number"
+              class="input-text"
+              disabled
+              [(ngModel)]="product.qty"
+            />
+            <button
+              [disabled]="product.stock == 0"
+              (click)="agregarProduct(product)"
+            >
+              +
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls
+      *ngIf="ListProduct.length > 0"
+      class="text-center"
+      nextLabel="Siguiente"
+      previousLabel="Anterior"
+      (pageChange)="p = $event"
+    ></pagination-controls>
+  </div>
+
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content rounded-6 shadow">
+        <div class="modal-header border-bottom-0 text-center">
+          <h5 class="modal-title w-100">Total: ${{ total }}</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body py-0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Seleccione medio de Pago</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                (click)="metodoPago('efectivo')"
+                [ngClass]="{ efectivoClass: metodoDePago == 'efectivo' }"
+              >
+                <td><i class="fas fa-credit-card"></i></td>
+                <td>Efectivo</td>
+              </tr>
+              <tr
+                (click)="metodoPago('tarjeta')"
+                [ngClass]="{ tarjetaClass: metodoDePago == 'tarjeta' }"
+              >
+                <td><i class="far fa-credit-card"></i></td>
+                <td>Tarjeta</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer flex-column border-top-0">
+          <button
+            *ngIf="!confirmPay"
+            (click)="finalizar()"
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target="#exampleModal"
+          >
+            Finalizar
+          </button>
+
+          <div *ngIf="confirmPay" class="position-static d-block py-5">
+            <div class="p-4 text-center">
+              <h5 class="mb-0">¿Seguro que desea confirmar la compra?</h5>
+
+              <button
+                type="button"
+                class="
+                  btn btn-lg btn-link
+                  fs-6
+                  text-decoration-none
+                  col-6
+                  m-0
+                  rounded-0
+                  border-right
+                "
+                (click)="confirmPayment()"
+              >
+                <strong>Aceptar</strong>
+              </button>
+              <button
+                type="button"
+                class="
+                  btn btn-lg btn-link
+                  fs-6
+                  text-decoration-none
+                  col-6
+                  m-0
+                  rounded-0
+                "
+                (click)="cancelPay()"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+
+          <div class="alert alert-danger" role="alert" *ngIf="noSelectMP">
+            Debe seleccionar un medio de pago!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-container *ngIf="showPdf">
+  <button class="btn btn-primary" (click)="volver()">Volver</button>
+  <pdf-viewer [src]="pdfSrc" [render-text]="true"></pdf-viewer>
+</ng-container>
