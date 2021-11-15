@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     localStorage.clear();
   }
-  iniciarSesion() {
+  iniciarSesion() { // metodo para iniciar sesion
     Swal.fire({
       allowOutsideClick: false,
       text: 'Ingresando',

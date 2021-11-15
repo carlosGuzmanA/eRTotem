@@ -13,10 +13,10 @@ export class AuthService {
   public userToken: string = '';
 
   constructor(private http: HttpClient) {
-    this.leerToken();
+    this.leerToken(); // leer el token del localstorage
   }
 
-  public iniciarSesion(login: Login): Observable<boolean> {
+  public iniciarSesion(login: Login): Observable<boolean> { // login: Login
     return this.http
       .get(
         `${this.apiEdenRed}User?userName=${login.username}&password=${login.password}`
@@ -29,13 +29,13 @@ export class AuthService {
       );
   }
 
-  public guardarTokenAndUsername(idToken: string, username: string) {
+  public guardarTokenAndUsername(idToken: string, username: string) { //guardar idToken, username en localstorage
     this.userToken = idToken;
     localStorage.setItem('token', idToken);
     localStorage.setItem('username', username);
   }
 
-  leerToken() {
+  leerToken() { // leer el token del localstorage
     if (localStorage.getItem('token')) {
       this.userToken = localStorage.getItem('token') ?? '';
     } else {
@@ -43,7 +43,7 @@ export class AuthService {
     }
     return this.userToken;
   }
-  exiteToken(): boolean {
+  exiteToken(): boolean { // verificar si existe el token
     return this.userToken.length > 2;
   }
 }

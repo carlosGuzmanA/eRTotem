@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from './services/product.service';
 import { Modal } from 'bootstrap';
 
-declare var bootstrap:any;
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-list-products',
@@ -15,12 +15,7 @@ declare var bootstrap:any;
 export class ListProductsComponent implements OnInit {
   public total: number = 0;
   public p: number = 1;
-  public ListProduct: Product[] = [];
-  public stocknoDisp: boolean = false;
-  public totalnoDisp: boolean = false;
-  public noSelectMP: boolean = false;
-  public showPdf: boolean = false;
-  public confirmPay: boolean = false;
+  public ListProduct: Product[] = [];  
   private testModal: Modal | undefined;
   public metodoDePago: string = '';
   public payment: Payment = {
@@ -30,18 +25,22 @@ export class ListProductsComponent implements OnInit {
       {
         sku: '',
         qty: 0,
-      }
+      },
     ],
-  }
+  };
   pdfSrc = '';
-  constructor(
-    private productsService: ProductService)
-  {}
+  // condiciones
+  public stocknoDisp: boolean = false;
+  public totalnoDisp: boolean = false;
+  public noSelectMP: boolean = false;
+  public showPdf: boolean = false;
+  public confirmPay: boolean = false;
+  constructor(private productsService: ProductService) {}
 
   ngOnInit(): void {
     this.getProducts();
   }
-  public getProducts(): void {
+  public getProducts(): void { // obtiene los productos
     this.productsService.getProducts().subscribe(
       async (resp) => {
         this.ListProduct = await resp;
@@ -51,12 +50,12 @@ export class ListProductsComponent implements OnInit {
       }
     );
   }
-  public restarProduct(product: Product): void {
+  public restarProduct(product: Product): void { // resta un producto a la lista de productos
     product.qty = product.qty - 1;
     this.totalnoDisp = false;
     this.total = this.sumarTotal();
   }
-  public agregarProduct(product: Product): void {
+  public agregarProduct(product: Product): void { // agrega un producto a la lista de productos
     if (product.qty > product.stock) {
       this.stocknoDisp = true;
       setTimeout(() => {
@@ -68,14 +67,13 @@ export class ListProductsComponent implements OnInit {
       this.total = this.sumarTotal();
     }
   }
-  public sumarTotal(): number {
+  public sumarTotal(): number { // suma el total de los productos
     let suma: number = 0;
     return (suma = this.ListProduct.reduce((a, b) => a + b.qty * b.price, 0));
   }
   public pagar(): void {
     if (this.total == 0) {
       this.totalnoDisp = true;
-
       setTimeout(() => {
         this.totalnoDisp = false;
       }, 3000);
@@ -90,57 +88,52 @@ export class ListProductsComponent implements OnInit {
       this.testModal?.show();
     }
   }
-  close() {
+  public close(): void { // cierra el modal
     this.testModal?.toggle();
   }
-  save() {
-    this.testModal?.toggle();
-  }
-  metodoPago(metodoPago: string) {
+  public metodoPago(metodoPago: string): void { // selecciona el metodo de pago
     this.metodoDePago = metodoPago;
     this.noSelectMP = false;
   }
-  finalizar() {
+  public finalizar(): void { // finaliza la compra
     if (this.metodoDePago == '') {
       this.noSelectMP = true;
       setTimeout(() => {
         this.noSelectMP = false;
       }, 3000);
     } else {
-      console.log('entroi acas');
-      
-      this.confirmPay = true;      
+      this.confirmPay = true;
     }
   }
-  confirmPayment() {
-console.log(this.metodoDePago);
-      this.payment.paymentMethod = this.metodoDePago;
-      this.payment.detail = this.ListProduct.filter(a=>a.qty > 0).map(a=>{ return {sku: a.sku, qty: a.qty} });
-      console.log(this.payment);
-      
-      this.productsService.postPayment(this.payment).subscribe(async (resp)=>{
-        console.log(resp);
-        if (await resp) {          
+  public confirmPayment(): void { // confirma el pago
+    this.payment.paymentMethod = this.metodoDePago;
+    this.payment.detail = this.ListProduct.filter((a) => a.qty > 0).map((a) => {
+      return { sku: a.sku, qty: a.qty };
+    });
+    this.productsService.postPayment(this.payment).subscribe(
+      async (resp) => {
+        if (await resp) {
           this.testModal?.toggle();
           this.getProducts();
-      }
-      },async (error)=>{
-      console.log(error);
-      if (error.status == 200) {
-        this.testModal?.toggle();
-        this.getProducts();
-        console.log('lanzar pago');
-        this.pdfSrc = 'data:application/pdf;base64,' + error.error.text;
+        }
+      },
+      async (error) => {
+        console.log(error);
+        if (error.status == 200) {
+          this.testModal?.toggle();
+          this.getProducts();
+          this.pdfSrc = 'data:application/pdf;base64,' + error.error.text;
           setTimeout(() => {
             this.showPdf = true;
           }, 500);
+        }
       }
-      });
+    );
   }
-  cancelPay() {
+  public cancelPay(): void { // cancela el pago
     this.confirmPay = false;
   }
-  volver(){
+  public volver(): void { // vuelve a la lista de productos
     this.showPdf = false;
     this.pdfSrc = '';
     this.total = 0;

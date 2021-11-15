@@ -1,40 +1,42 @@
-.pricing-header {
-    max-width: 700px;
-  }
+.contenedorProductos {
+  max-width: auto;
+}
 
-  .input-text {
-    width: 150px;
-    margin-left: 3px;
-    margin-right: 3px;
-  }
-  .bi {
-    vertical-align: -.125em;
-    fill: currentColor;
-  }
+.input-text {
+  width: 150px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+.bi {
+  vertical-align: -0.125em;
+  fill: currentColor;
+}
 
 .modal-sheet .modal-dialog {
-  width: 380px;
-  transition: bottom .75s ease-in-out;
+  width: 100%;
+  transition: bottom 0.75s ease-in-out;
 }
 .modal-sheet .modal-footer {
   padding-bottom: 2rem;
 }
 
 .modal-alert .modal-dialog {
-  width: 380px;
+  width: 100%;
 }
 
-.border-right { border-right: 1px solid #eee; }
+.border-right {
+  border-right: 1px solid #eee;
+}
 
 .modal-tour .modal-dialog {
-  width: 380px;
+  width: 100%;
 }
 
-.efectivoClass{
+.efectivoClass {
   background-color: #00a65a;
   color: #fff;
 }
-.tarjetaClass{
+.tarjetaClass {
   background-color: #00a65a;
   color: #fff;
 }

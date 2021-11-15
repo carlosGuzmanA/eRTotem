@@ -14,15 +14,15 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  public getProducts(): Observable<Product[]> {
+  public getProducts(): Observable<Product[]> { // obtiene los productos
     return this.http.get<Product[]>(`${this.apiEdenRed}Product`).pipe(
       map((resp: Product[]) => {
-        resp.map((product: Product) => product.qty = 0);
+        resp.map((product: Product) => (product.qty = 0));
         return resp;
       })
     );
   }
-  public postPayment(payment: Payment): Observable<Payment[]> {
-    return this.http.post<Payment[]>(`${this.apiEdenRed}Payment`, [payment]);    
+  public postPayment(payment: Payment): Observable<Payment[]> { // realiza el pago
+    return this.http.post<Payment[]>(`${this.apiEdenRed}Payment`, [payment]);
   }
 }

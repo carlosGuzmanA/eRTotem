@@ -28,14 +28,11 @@ export class JwtInterceptorInterceptor implements HttpInterceptor {
     }
     return next.handle(req).pipe(
       catchError((err: HttpErrorResponse) => {
-
         if (err.status === 401) {
           this.router.navigateByUrl('/login');
           localStorage.clear();
         }
-
         return throwError(err);
-
       })
     );
   }
